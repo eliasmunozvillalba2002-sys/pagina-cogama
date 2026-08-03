@@ -59,7 +59,7 @@
         <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="{{ url('/') }}" class="flex items-center gap-3 text-xl font-bold text-blue-800 tracking-tight">
                 @if(!empty($contenidoFooter['escudo_imagen']))
-                    <img src="{{ $contenidoFooter['escudo_imagen'] }}" alt="Escudo del colegio" class="h-9 w-9 object-contain rounded-md bg-white p-0.5 shadow-none">
+                    <img src="{{ asset('storage/' . $contenidoFooter['escudo_imagen']) }}" alt="Escudo oficial del Colegio Gabriel García Márquez COGAMA, símbolo institucional que representa la identidad educativa de la institución" class="h-9 w-9 object-contain rounded-md bg-white p-0.5 shadow-none">
                 @endif
                 <span>{{ $contenidoFooter['nombre_colegio'] ?? 'COGAMA' }}</span>
             </a>
