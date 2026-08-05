@@ -20,7 +20,7 @@
             <div class="overflow-hidden rounded-lg shadow">
                 <template x-for="(s, i) in slides" :key="i">
                     <div x-show="idx === i" x-transition class="w-full">
-                        <img :src="`/storage/${s.imagen}`" class="w-full h-96 object-cover" :alt="s.titulo ?? 'Diapositiva'">
+                        <img :src="`/storage/${s.imagen}`" class="w-full h-96 object-contain" :alt="s.titulo ?? 'Diapositiva'">
                         <div class="p-6 bg-white">
                             <h3 class="font-semibold text-xl" x-text="s.titulo"></h3>
                             <p class="text-sm text-slate-600 mt-1" x-text="s.subtitulo"></p>

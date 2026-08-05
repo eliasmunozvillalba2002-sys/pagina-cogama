@@ -85,7 +85,7 @@
 
         <template x-for="(item, i) in items" :key="i">
             <div x-show="index === i" x-transition class="rounded-xl overflow-hidden shadow-sm">
-                <img :src="item.src" :alt="item.alt" class="w-full h-64 md:h-80 object-cover">
+                <img :src="item.src" :alt="item.alt" class="w-full h-64 md:h-80 object-contain">
                 <div class="p-4 bg-white">
                     <h3 class="font-semibold text-slate-800" x-text="item.titulo"></h3>
                     <p class="text-sm text-slate-600 mt-1" x-text="item.descripcion"></p>
