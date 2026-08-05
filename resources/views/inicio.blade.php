@@ -191,7 +191,7 @@
                             📄 Ver documento PDF
                         </a>
                     @else
-                        <img src="{{ asset('storage/' . $pub->imagen) }}" alt="{{ $pub->titulo ?? 'Publicación' }}" loading="lazy" class="w-full h-40 object-cover">
+                        <img src="{{ asset('storage/' . $pub->imagen) }}" alt="{{ $pub->titulo ?? 'Publicación' }}" loading="lazy" class="w-full h-40 object-contain bg-white">
                     @endif
                 @endif
                 <div class="p-6">
