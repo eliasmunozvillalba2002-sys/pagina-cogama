@@ -43,12 +43,15 @@
                     @endif
                 </td>
                 <td class="px-6 py-3 text-right">
-                    <form method="POST" action="{{ route('admin.publicaciones.destroy', $pub->id) }}"
-                          onsubmit="return confirm('¿Eliminar esta publicación?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-600 hover:text-red-800 text-xs font-medium">Eliminar</button>
-                    </form>
+                    <div class="inline-flex items-center gap-4">
+                        <a href="{{ route('admin.publicaciones.edit', $pub->id) }}" class="text-blue-600 hover:text-blue-800 text-xs font-medium">Editar</a>
+                        <form method="POST" action="{{ route('admin.publicaciones.destroy', $pub->id) }}"
+                              onsubmit="return confirm('¿Eliminar esta publicación?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-800 text-xs font-medium">Eliminar</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @empty

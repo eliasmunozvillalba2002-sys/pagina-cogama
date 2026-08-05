@@ -27,6 +27,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/publicaciones', [App\Http\Controllers\Admin\PublicacionController::class, 'index'])->name('publicaciones.index');
     Route::get('/publicaciones/nueva', [App\Http\Controllers\Admin\PublicacionController::class, 'create'])->name('publicaciones.create');
     Route::post('/publicaciones', [App\Http\Controllers\Admin\PublicacionController::class, 'store'])->name('publicaciones.store');
+    Route::get('/publicaciones/{publicacione}/editar', [App\Http\Controllers\Admin\PublicacionController::class, 'edit'])->name('publicaciones.edit');
+    Route::put('/publicaciones/{publicacione}', [App\Http\Controllers\Admin\PublicacionController::class, 'update'])->name('publicaciones.update');
     Route::delete('/publicaciones/{publicacione}', [App\Http\Controllers\Admin\PublicacionController::class, 'destroy'])->name('publicaciones.destroy');
 
     Route::get('/galeria', [App\Http\Controllers\Admin\GaleriaController::class, 'index'])->name('galeria.index');
