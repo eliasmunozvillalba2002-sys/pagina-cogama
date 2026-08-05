@@ -8,9 +8,13 @@
 
     <div class="text-center mb-10">
         <h1 class="text-3xl font-bold text-slate-800 mb-3">Inscríbete</h1>
-        <p class="text-slate-600">
+        <p class="text-slate-600 mb-6">
             Completa tus datos y nos comunicaremos contigo para continuar el proceso.
         </p>
+        <blockquote class="text-blue-800 italic text-sm border-l-4 border-blue-800 pl-4 max-w-md mx-auto text-left">
+            "Nadie enseña vida a nadie. Toda existencia es una experiencia personal e intransferible."
+            <span class="block text-xs text-slate-500 mt-1 not-italic">— Gabriel García Márquez</span>
+        </blockquote>
     </div>
 
     @if(session('status'))
@@ -54,10 +58,22 @@
             </div>
         </div>
 
-        <div>
-            <label for="documento" class="block text-sm font-medium text-slate-700 mb-1">Número de documento</label>
-            <input id="documento" type="text" name="documento" value="{{ old('documento') }}"
-                   class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Tipo de documento</label>
+                <select name="tipo_documento"
+                        class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <option value="Tarjeta de Identidad" {{ old('tipo_documento') == 'Tarjeta de Identidad' ? 'selected' : '' }}>Tarjeta de Identidad</option>
+                    <option value="Cédula de Ciudadanía" {{ old('tipo_documento') == 'Cédula de Ciudadanía' ? 'selected' : '' }}>Cédula de Ciudadanía</option>
+                    <option value="Cédula de Extranjería" {{ old('tipo_documento') == 'Cédula de Extranjería' ? 'selected' : '' }}>Cédula de Extranjería</option>
+                    <option value="Registro Civil" {{ old('tipo_documento') == 'Registro Civil' ? 'selected' : '' }}>Registro Civil</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Número de documento</label>
+                <input type="text" name="documento" value="{{ old('documento') }}"
+                       class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            </div>
         </div>
 
         <div class="grid sm:grid-cols-2 gap-5">

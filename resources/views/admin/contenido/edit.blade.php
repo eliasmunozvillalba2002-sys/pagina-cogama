@@ -67,7 +67,12 @@
             <input type="file" name="bandera_imagen" accept="image/*"
                    class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
             @if(!empty($contenido['bandera_imagen']))
-                <p class="text-xs text-slate-500 mt-2">Archivo actual: {{ basename($contenido['bandera_imagen']) }}</p>
+                <div class="mt-2 flex items-center gap-3">
+                    <p class="text-xs text-slate-500">Archivo actual: {{ basename($contenido['bandera_imagen']) }}</p>
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-600">
+                        <input type="checkbox" name="eliminar_bandera_imagen" value="1"> Eliminar
+                    </label>
+                </div>
             @endif
         </div>
         <div>
@@ -75,11 +80,51 @@
             <input type="file" name="escudo_imagen" accept="image/*"
                    class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
             @if(!empty($contenido['escudo_imagen']))
-                <p class="text-xs text-slate-500 mt-2">Archivo actual: {{ basename($contenido['escudo_imagen']) }}</p>
+                <div class="mt-2 flex items-center gap-3">
+                    <p class="text-xs text-slate-500">Archivo actual: {{ basename($contenido['escudo_imagen']) }}</p>
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-600">
+                        <input type="checkbox" name="eliminar_escudo_imagen" value="1"> Eliminar
+                    </label>
+                </div>
+            @endif
+        </div>
+    
+    </div>
+<div class="grid md:grid-cols-2 gap-6">
+        <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Foto de la oficina (carrusel)</label>
+            <input type="file" name="carrusel_oficina_imagen" accept="image/*"
+                   class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            @if(!empty($contenido['carrusel_oficina_imagen']))
+                <div class="mt-2 flex items-center gap-3">
+                    <p class="text-xs text-slate-500">Archivo actual: {{ basename($contenido['carrusel_oficina_imagen']) }}</p>
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-600">
+                        <input type="checkbox" name="eliminar_carrusel_oficina_imagen" value="1"> Eliminar
+                    </label>
+                </div>
+            @endif
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">Foto de la sede (carrusel)</label>
+            <input type="file" name="carrusel_sede_imagen" accept="image/*"
+                   class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            @if(!empty($contenido['carrusel_sede_imagen']))
+                <div class="mt-2 flex items-center gap-3">
+                    <p class="text-xs text-slate-500">Archivo actual: {{ basename($contenido['carrusel_sede_imagen']) }}</p>
+                    <label class="inline-flex items-center gap-2 text-sm text-slate-600">
+                        <input type="checkbox" name="eliminar_carrusel_sede_imagen" value="1"> Eliminar
+                    </label>
+                </div>
             @endif
         </div>
     </div>
 
+    <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Horario de clases (domingos)</label>
+        <input type="text" name="horario_clases" value="{{ old('horario_clases', $contenido['horario_clases'] ?? '') }}"
+               placeholder="Ej: 7:00 a.m. - 1:05 p.m."
+               class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+    </div>
     <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">Imagen de portada (inicio)</label>
         <input type="file" name="imagen_portada" accept="image/*"

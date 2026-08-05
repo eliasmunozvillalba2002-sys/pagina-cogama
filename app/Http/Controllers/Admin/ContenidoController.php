@@ -18,19 +18,30 @@ class ContenidoController extends Controller
 
     public function update(Request $request)
     {
-        $campos = [
+        $camposImagen = [
+            'bandera_imagen', 'escudo_imagen', 'imagen_portada',
+            'carrusel_oficina_imagen', 'carrusel_sede_imagen',
+        ];
+
+        $camposTexto = [
             'nombre_colegio', 'lema', 'bienvenida', 'mision', 'vision',
             'filosofia', 'politica_calidad', 'perfil_estudiante',
             'correo_contacto', 'telefono', 'whatsapp', 'direccion', 'horario_secretaria',
-            'bandera_imagen', 'escudo_imagen', 'imagen_portada', 'himno_texto', 'parte_legal',
+            'himno_texto', 'parte_legal', 'horario_clases',
         ];
 
-        foreach ($campos as $clave) {
-            $valor = $request->input($clave);
+        foreach ($camposTexto as $clave) {
+            ContenidoInstitucional::updateOrCreate(
+                ['clave' => $clave],
+                ['valor' => $request->input($clave)]
+            );
+        }
+
+        foreach ($camposImagen as $clave) {
+            $archivoActual = ContenidoInstitucional::where('clave', $clave)->value('valor');
+            $valor = $archivoActual;
 
             if ($request->hasFile($clave)) {
-                $archivoActual = ContenidoInstitucional::where('clave', $clave)->value('valor');
-
                 if (!empty($archivoActual) && Storage::disk('public')->exists($archivoActual)) {
                     Storage::disk('public')->delete($archivoActual);
                 }
@@ -40,13 +51,10 @@ class ContenidoController extends Controller
                 $valor = $archivo->storeAs('institucional', $nombreArchivo, 'public');
             }
 
-            if ($clave === 'imagen_portada' && $request->boolean('eliminar_imagen_portada')) {
-                $archivoActual = ContenidoInstitucional::where('clave', $clave)->value('valor');
-
+            if ($request->boolean('eliminar_' . $clave)) {
                 if (!empty($archivoActual) && Storage::disk('public')->exists($archivoActual)) {
                     Storage::disk('public')->delete($archivoActual);
                 }
-
                 $valor = '';
             }
 

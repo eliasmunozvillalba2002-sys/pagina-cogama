@@ -59,9 +59,9 @@
         <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="{{ url('/') }}" class="flex items-center gap-3 text-xl font-bold text-blue-800 tracking-tight">
                 @if(!empty($contenidoFooter['escudo_imagen']))
-                    <img src="{{ asset('storage/' . $contenidoFooter['escudo_imagen']) }}" alt="Escudo oficial del Colegio Gabriel García Márquez COGAMA, símbolo institucional que representa la identidad educativa de la institución" class="h-9 w-9 object-contain rounded-md bg-white p-0.5 shadow-none">
+                    <img src="{{ $contenidoFooter['escudo_imagen'] }}" alt="Escudo del colegio" class="h-9 w-9 object-contain rounded-md bg-white p-0.5 shadow-none">
                 @endif
-                <span>{{ $contenidoFooter['nombre_colegio'] ?? 'COGAMA' }}</span>
+                    <span>{{ $contenidoFooter['nombre_colegio'] ?? 'COGAMA' }}</span>
             </a>
 
             <!-- Mobile hamburger -->
@@ -74,13 +74,25 @@
 
             <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
                 <li><a href="{{ url('/') }}" class="hover:text-blue-700 transition">Inicio</a></li>
-                <li><a href="{{ route('quienes-somos') }}" class="hover:text-blue-700 transition">Quiénes somos</a></li>
-                <li><a href="{{ route('docentes.publico') }}" class="hover:text-blue-700 transition">Nuestro Equipo</a></li>
-                <li><a href="{{ url('/modelo-clei') }}" class="hover:text-blue-700 transition">Modelo CLEI</a></li>
+
+                <li class="relative" x-data="{ subOpen: false }" @click.away="subOpen = false">
+                    <button @click="subOpen = !subOpen" type="button" class="flex items-center gap-1 hover:text-blue-700 transition">
+                        Nuestro Colegio
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="subOpen" x-cloak
+                        class="absolute left-0 mt-3 w-56 bg-white rounded-lg shadow-lg border border-slate-100 py-2 z-50">
+                        <a href="{{ route('quienes-somos') }}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Quiénes somos</a>
+                        <a href="{{ route('docentes.publico') }}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Nuestro Equipo</a>
+                        <a href="{{ url('/modelo-clei') }}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Modelo CLEI</a>
+                    </div>
+                </li>
+
                 <li><a href="{{ route('galeria') }}" class="hover:text-blue-700 transition">Galería</a></li>
                 <li><a href="{{ url('/contacto') }}" class="hover:text-blue-700 transition">Contacto</a></li>
             </ul>
-
             <div class="hidden md:block">
                 <a href="{{ route('login') }}" class="text-xs text-slate-400 hover:text-slate-600 transition">
                     Acceder

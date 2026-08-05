@@ -38,6 +38,80 @@
     </div>
 </section>
 
+{{-- CARRUSEL DE PUBLICACIONES --}}
+@php
+    // Si hay diapositivas desde el admin (carrusel), usarlas; si no, usar publicaciones como fallback
+    $carouselItems = collect();
+    if (!empty($carruselSlides) && $carruselSlides->count()) {
+        $carouselItems = $carruselSlides->map(function($s){
+            return [
+                'src' => asset('storage/' . $s->imagen),
+                'alt' => $s->titulo ?? 'Diapositiva',
+                'titulo' => $s->titulo ?? '',
+                'descripcion' => $s->subtitulo ?? '',
+            ];
+        })->values();
+    } else {
+        $carouselItems = $publicaciones->filter(fn($p) => $p->imagen && !str_ends_with($p->imagen, '.pdf'))->map(function($p){
+            return [
+                'src' => asset('storage/' . $p->imagen),
+                'alt' => $p->titulo ?? 'Publicación',
+                'titulo' => $p->titulo ?? '',
+                'descripcion' => Str::limit($p->contenido ?? '', 140),
+            ];
+        })->values();
+    }
+@endphp
+
+@if($carouselItems->count())
+<section class="max-w-6xl mx-auto px-6 py-8">
+    <div x-data='{ 
+            items: {!! $carouselItems->toJson(JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!},
+            index: 0,
+            timer: null,
+            touchStart: null,
+            init() {
+                if(this.items && this.items.length > 1) {
+                    this.start();
+                }
+            },
+            start() { this.stop(); this.timer = setInterval(() => { this.next(); }, 4000); },
+            stop() { if(this.timer) { clearInterval(this.timer); this.timer = null; } },
+            prev() { this.index = (this.index - 1 + this.items.length) % this.items.length; },
+            next() { this.index = (this.index + 1) % this.items.length; },
+            onTouchStart(e) { this.touchStart = e.touches[0].clientX; },
+            onTouchEnd(e) { const dx = (this.touchStart || 0) - e.changedTouches[0].clientX; if (dx > 50) { this.next(); } else if (dx < -50) { this.prev(); } this.touchStart = null; }
+        }' x-init="init()" @mouseenter="stop()" @mouseleave="start()" @touchstart.window="onTouchStart($event)" @touchend.window="onTouchEnd($event)" class="relative">
+
+        <template x-for="(item, i) in items" :key="i">
+            <div x-show="index === i" x-transition class="rounded-xl overflow-hidden shadow-sm">
+                <img :src="item.src" :alt="item.alt" class="w-full h-64 md:h-80 object-cover">
+                <div class="p-4 bg-white">
+                    <h3 class="font-semibold text-slate-800" x-text="item.titulo"></h3>
+                    <p class="text-sm text-slate-600 mt-1" x-text="item.descripcion"></p>
+                </div>
+            </div>
+        </template>
+
+        <!-- Controls -->
+        <button type="button" @click="prev()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 text-slate-800 rounded-full p-2 shadow hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 16.293a1 1 0 010-1.414L15.586 11H5a1 1 0 110-2h10.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        </button>
+        <button type="button" @click="next()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 text-slate-800 rounded-full p-2 shadow hover:bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-180" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 16.293a1 1 0 010-1.414L15.586 11H5a1 1 0 110-2h10.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        </button>
+
+        <!-- Indicators -->
+        <div class="flex justify-center gap-2 mt-4">
+            <template x-for="(item, i) in items" :key="i">
+                <button @click="index = i" :class="{'bg-blue-800': index===i, 'bg-slate-300': index!==i }" class="w-3 h-3 rounded-full"></button>
+            </template>
+        </div>
+
+    </div>
+</section>
+@endif
+
 {{-- POR QUÉ ELEGIRNOS --}}
 <section class="max-w-6xl mx-auto px-6 py-20">
     <h2 class="text-3xl font-bold text-center text-slate-800 mb-14">
@@ -145,5 +219,80 @@
         Ver requisitos de inscripción
     </a>
 </section>
+
+{{-- CARRUSEL INSTITUCIONAL --}}
+@if(!empty($contenido['carrusel_oficina_imagen']) || !empty($contenido['carrusel_sede_imagen']) || !empty($contenido['escudo_imagen']))
+<section class="py-16 bg-slate-100">
+    <div class="max-w-5xl mx-auto px-6">
+
+        <div class="relative rounded-2xl overflow-hidden shadow-lg" x-data="{ slide: 0, total: 3, timer: null }"
+             x-init="timer = setInterval(() => slide = (slide + 1) % total, 6000)"
+             @touchstart="touchX = $event.touches[0].clientX"
+             @touchend="if (touchX - $event.changedTouches[0].clientX > 50) { slide = (slide + 1) % total; clearInterval(timer); timer = setInterval(() => slide = (slide + 1) % total, 6000); } else if ($event.changedTouches[0].clientX - touchX > 50) { slide = (slide - 1 + total) % total; clearInterval(timer); timer = setInterval(() => slide = (slide + 1) % total, 6000); }">
+
+            <div class="relative h-80 md:h-96">
+
+                {{-- SLIDE 1: OFICINA --}}
+                <div x-show="slide === 0" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0">
+                    @if(!empty($contenido['carrusel_oficina_imagen']))
+                        <img src="{{ asset('storage/' . $contenido['carrusel_oficina_imagen']) }}" class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full bg-blue-900"></div>
+                    @endif
+                    <div class="absolute inset-0 bg-black/30"></div>
+                    <div class="absolute bottom-6 left-6 bg-white rounded-xl shadow-lg px-6 py-4 max-w-xs">
+                        <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">Horario de atención</p>
+                        <p class="text-blue-900 font-bold whitespace-pre-line">{{ $contenido['horario_secretaria'] ?? 'Consulta nuestro horario' }}</p>
+                    </div>
+                </div>
+
+                {{-- SLIDE 2: SEDE --}}
+                <div x-show="slide === 1" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0">
+                    @if(!empty($contenido['carrusel_sede_imagen']))
+                        <img src="{{ asset('storage/' . $contenido['carrusel_sede_imagen']) }}" class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full bg-blue-800"></div>
+                    @endif
+                    <div class="absolute inset-0 bg-black/30"></div>
+                    <div class="absolute bottom-6 left-6 bg-white rounded-xl shadow-lg px-6 py-4 max-w-xs">
+                        <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">Horario de clases</p>
+                        <p class="text-blue-900 font-bold">Domingos: {{ $contenido['horario_clases'] ?? '7:00 a.m. - 1:05 p.m.' }}</p>
+                    </div>
+                </div>
+
+                {{-- SLIDE 3: ESCUDO --}}
+                <div x-show="slide === 2" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="absolute inset-0 bg-blue-950 flex items-center px-10">
+                    @if(!empty($contenido['escudo_imagen']))
+                       <img src="{{ $contenido['escudo_imagen'] }}" class="h-32 md:h-40 mr-8">
+                    @endif
+                    <div class="text-white max-w-md">
+                        <h3 class="text-2xl font-bold mb-2">{{ $contenido['bienvenida'] ?? 'Estudiar es progresar' }}</h3>
+                        <p class="text-blue-200 text-sm">Nunca es tarde para cumplir esa meta pendiente.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- FLECHAS (escritorio) --}}
+            <button @click="slide = (slide - 1 + total) % total; clearInterval(timer); timer = setInterval(() => slide = (slide + 1) % total, 6000)"
+                    class="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-10 h-10 rounded-full items-center justify-center shadow transition">
+                ‹
+            </button>
+            <button @click="slide = (slide + 1) % total; clearInterval(timer); timer = setInterval(() => slide = (slide + 1) % total, 6000)"
+                    class="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-10 h-10 rounded-full items-center justify-center shadow transition">
+                ›
+            </button>
+
+            {{-- PUNTOS --}}
+            <div class="absolute bottom-4 right-6 flex gap-2">
+                <button @click="slide = 0" :class="slide === 0 ? 'bg-white' : 'bg-white/40'" class="w-2.5 h-2.5 rounded-full transition"></button>
+                <button @click="slide = 1" :class="slide === 1 ? 'bg-white' : 'bg-white/40'" class="w-2.5 h-2.5 rounded-full transition"></button>
+                <button @click="slide = 2" :class="slide === 2 ? 'bg-white' : 'bg-white/40'" class="w-2.5 h-2.5 rounded-full transition"></button>
+            </div>
+
+       </div>
+    </div>
+</section>
+@endif
 
 @endsection

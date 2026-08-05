@@ -38,6 +38,10 @@
                class="block px-3 py-2.5 rounded-lg hover:bg-blue-900 transition {{ request()->routeIs('admin.galeria.*') ? 'bg-blue-900 text-white' : '' }}">
                 Galería
             </a>
+            <a href="{{ route('admin.carrusel.index') }}"
+              class="block px-3 py-2.5 rounded-lg hover:bg-blue-900 transition {{ request()->routeIs('admin.carrusel.*') ? 'bg-blue-900 text-white' : '' }}">
+                Carrusel
+            </a>
             <a href="{{ route('admin.contenido.edit') }}"
                class="block px-3 py-2.5 rounded-lg hover:bg-blue-900 transition {{ request()->routeIs('admin.contenido.*') ? 'bg-blue-900 text-white' : '' }}">
                 Contenido del colegio

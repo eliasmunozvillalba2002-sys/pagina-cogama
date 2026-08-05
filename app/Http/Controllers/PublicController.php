@@ -80,6 +80,27 @@ class PublicController extends Controller
             ->take(3)
             ->get();
 
-        return view('inicio', compact('contenido', 'publicaciones'));
+        // Preferir diapositivas administradas en Carrusel para el hero/carrusel principal si existen
+        $carruselSlides = \App\Models\Carrusel::where('activo', true)
+            ->orderBy('orden')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('inicio', compact('contenido', 'publicaciones', 'carruselSlides'));
+    }
+
+    // Página pública dedicada al carrusel (sección independiente)
+    public function carruselPage()
+    {
+        $contenido = $this->resolverContenidoInstitucional(ContenidoInstitucional::pluck('valor', 'clave')->toArray());
+
+        $slides = \App\Models\Carrusel::where('activo', true)
+            ->orderBy('orden')
+            ->orderByDesc('created_at')
+            ->get()
+            ->groupBy('tipo');
+
+        // $slides es un collection agrupada por tipo: 'general','oficina','sede'
+        return view('carrusel', compact('contenido', 'slides'));
     }
 }

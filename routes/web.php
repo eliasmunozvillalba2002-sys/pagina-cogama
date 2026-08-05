@@ -12,6 +12,7 @@ Route::get('/contacto', [PublicController::class, 'contacto'])->name('contacto')
 Route::get('/inscripcion', [App\Http\Controllers\InscripcionController::class, 'formulario'])->name('inscripcion.formulario');
 Route::post('/inscripcion', [App\Http\Controllers\InscripcionController::class, 'store'])->name('inscripcion.store');
 Route::get('/galeria', [App\Http\Controllers\PublicController::class, 'galeria'])->name('galeria');
+Route::get('/carrusel', [App\Http\Controllers\PublicController::class, 'carruselPage'])->name('carrusel');
 
 Route::get('/dashboard', function () {
     return redirect('/admin/dashboard');
@@ -32,6 +33,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/galeria/nueva', [App\Http\Controllers\Admin\GaleriaController::class, 'create'])->name('galeria.create');
     Route::post('/galeria', [App\Http\Controllers\Admin\GaleriaController::class, 'store'])->name('galeria.store');
     Route::delete('/galeria/{galeria}', [App\Http\Controllers\Admin\GaleriaController::class, 'destroy'])->name('galeria.destroy');
+
+    // Carrusel admin CRUD
+    Route::get('/carrusel', [App\Http\Controllers\Admin\CarruselController::class, 'index'])->name('carrusel.index');
+    Route::get('/carrusel/nuevo', [App\Http\Controllers\Admin\CarruselController::class, 'create'])->name('carrusel.create');
+    Route::post('/carrusel', [App\Http\Controllers\Admin\CarruselController::class, 'store'])->name('carrusel.store');
+    Route::get('/carrusel/{carrusel}/editar', [App\Http\Controllers\Admin\CarruselController::class, 'edit'])->name('carrusel.edit');
+    Route::put('/carrusel/{carrusel}', [App\Http\Controllers\Admin\CarruselController::class, 'update'])->name('carrusel.update');
+    Route::delete('/carrusel/{carrusel}', [App\Http\Controllers\Admin\CarruselController::class, 'destroy'])->name('carrusel.destroy');
 
     Route::get('/docentes', [App\Http\Controllers\Admin\DocenteController::class, 'index'])->name('docentes.index');
     Route::get('/docentes/nuevo', [App\Http\Controllers\Admin\DocenteController::class, 'create'])->name('docentes.create');

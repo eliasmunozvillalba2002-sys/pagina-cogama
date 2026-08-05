@@ -15,6 +15,7 @@
         <thead class="bg-slate-50 text-slate-500 text-left">
             <tr>
                 <th class="px-6 py-3">Nombre</th>
+                <th class="px-6 py-3">Tipo de Documento</th>
                 <th class="px-6 py-3">Documento</th>
                 <th class="px-6 py-3">Teléfono</th>
                 <th class="px-6 py-3">Ciclo</th>
@@ -27,6 +28,7 @@
             @forelse($inscripciones as $ins)
             <tr class="border-t border-slate-100">
                 <td class="px-6 py-3 font-medium text-slate-800">{{ $ins->nombres }} {{ $ins->apellidos }}</td>
+                <td class="px-6 py-3">{{ $ins->tipo_documento }}</td>
                 <td class="px-6 py-3">{{ $ins->documento }}</td>
                 <td class="px-6 py-3">
                     <a href="https://wa.me/57{{ preg_replace('/\D/', '', $ins->telefono) }}" target="_blank" class="text-blue-700 hover:underline">

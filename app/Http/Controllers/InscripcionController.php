@@ -28,16 +28,17 @@ class InscripcionController extends Controller
         ]);
 
         $request->validate([
-            'nombres' => ['required', 'string', 'max:255', 'regex:/^[\pL\s.\'-]+$/u'],
-            'apellidos' => ['required', 'string', 'max:255', 'regex:/^[\pL\s.\'-]+$/u'],
-            'documento' => ['required', 'string', 'max:50', 'regex:/^[0-9A-Za-z\-]+$/'],
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'tipo_documento' => 'required|string|max:50',
+            'documento' => 'required|string|max:50',
             'telefono' => ['required', 'string', 'max:30', 'regex:/^[0-9+()\s-]{4,30}$/'],
             'email' => ['nullable', 'email:rfc,dns'],
             'ciclo_interes' => ['nullable', 'string', 'max:50'],
             'mensaje' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $data = $request->only(['nombres', 'apellidos', 'documento', 'telefono', 'email', 'mensaje']);
+        $data = $request->only(['nombres', 'apellidos', 'tipo_documento', 'documento', 'telefono', 'email', 'mensaje']);
 
         if ($request->filled('ciclo_interes')) {
             $data['ciclo_interes_id'] = Ciclo::where('nombre', $request->ciclo_interes)->value('id');
